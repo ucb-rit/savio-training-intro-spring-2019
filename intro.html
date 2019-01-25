@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <meta name="author" content="September 18, 2018" />
+  <meta name="author" content="February 11, 2019" />
   <title>Savio introductory training: Basic usage of the Berkeley Savio high-performance computing cluster</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
@@ -48,25 +48,25 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <body>
 <div id="header">
 <h1 class="title">Savio introductory training: Basic usage of the Berkeley Savio high-performance computing cluster</h1>
-<h2 class="author">September 18, 2018</h2>
-<h3 class="date">Kunal Mishra and Chris Paciorek</h3>
+<h2 class="author">February 11, 2019</h2>
+<h3 class="date">Christopher Hann-Soden and Chris Paciorek</h3>
 </div>
 <h1 id="introduction">Introduction</h1>
 <p>We'll do this mostly as a demonstration. We encourage you to login to your account and try out the various examples yourself as we go through them.</p>
 <p>Much of this material is based on the extensive Savio documention we have prepared and continue to prepare, available at <a href="http://research-it.berkeley.edu/services/high-performance-computing" class="uri">http://research-it.berkeley.edu/services/high-performance-computing</a>.</p>
-<p>The materials for this tutorial are available using git at the short URL <a href="http://bit.do/F18Savio">bit.do/F18Savio</a>, the GitHub URL <a href="https://github.com/ucberkeley/savio-training-intro-2018" class="uri">https://github.com/ucberkeley/savio-training-intro-2018</a>, or simply as a <a href="https://github.com/ucberkeley/savio-training-intro-2018/archive/master.zip">zip file</a>.</p>
+<p>The materials for this tutorial are available using git at the short URL <a href="http://bit.do/S19Savio">bit.do/S19Savio</a>, the GitHub URL <a href="https://github.com/ucberkeley/savio-training-intro-spring-2019" class="uri">https://github.com/ucberkeley/savio-training-intro-spring-2019</a>, or simply as a <a href="https://github.com/ucberkeley/savio-training-intro-spring-2019/archive/master.zip">zip file</a>.</p>
 <h1 id="outline">Outline</h1>
 <p>This training session will cover the following topics:</p>
 <ul>
 <li>System capabilities and hardware
 <ul>
 <li>Getting access to the system - FCA, condo, ICA</li>
+<li>Login nodes, compute nodes, and DTN nodes</li>
 <li>Savio computing nodes</li>
 <li>Disk space options (home, scratch, condo storage)</li>
 </ul></li>
 <li>Logging in, data transfer, and software
 <ul>
-<li>Login nodes, compute nodes, and DTN nodes</li>
 <li>Logging in</li>
 <li>Data transfer
 <ul>
@@ -102,9 +102,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 <h1 id="system-capabilities-and-hardware">System capabilities and hardware</h1>
 <ul>
-<li>Savio is a &gt;380-node, &gt;8000-core Linux cluster rated at &gt;300 peak teraFLOPS.</li>
-<li>about 174 compute nodes provided by the institution for general access</li>
-<li>about 211 compute nodes contributed by researchers in the Condo program</li>
+<li>Savio is a 470-node, &gt;11,600-core Linux cluster rated at nearly 450 peak teraFLOPS.</li>
+<li>about 40% of the compute nodes provided by the institution for general access</li>
+<li>about 60% compute nodes contributed by researchers in the Condo program</li>
 </ul>
 <h1 id="getting-access-to-the-system---fca-and-condo">Getting access to the system - FCA and condo</h1>
 <ul>
@@ -113,14 +113,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Instructors can request an <a href="http://research-it.berkeley.edu/programs/berkeley-research-computing/instructional-computing-allowance">Instructional Computing Allowance (ICA)</a>.</li>
 </ul>
 <p>Faculty/principal investigators can allow researchers working with them to get user accounts with access to the FCA or condo resources available to the faculty member.</p>
-<h1 id="savio-computing-nodes">Savio computing nodes</h1>
-<p>Let's take a look at the hardware specifications of the computing nodes on the cluster <a href="http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide">(see the <em>Hardware Configuration</em> section of this document)</a>.</p>
-<p>The nodes are divided into several pools, called partitions. These partitions have different restrictions and costs associated with them <a href="http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide">(see the <em>Scheduler Configuration</em> section of this document)</a>. Any job you submit must be submitted to a partition to which you have access.</p>
-<h1 id="disk-space-options-home-scratch-project-condo-storage">Disk space options (home, scratch, project, condo storage)</h1>
-<p>You have access to the following disk space, described <a href="http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide">here in the <em>Storage and Backup</em> section</a>.</p>
-<p>When reading/writing data to/from disk, unless the amount of data is small, please put the data in your scratch space at <code>/global/scratch/SAVIO_USERNAME</code>. The system is set up so that disk access for all users is optimized when users are doing input/output (I/O) off of scratch rather than off of their home directories. Doing I/O with files on your home directory can impact the ability of others to access their files on the filesystem.</p>
-<p>Large amounts of disk space is available for purchase from the <a href="http://research-it.berkeley.edu/services/high-performance-computing/brc-condo-storage-service-savio"><em>condo storage</em> offering</a>. The minimum purchase is about $6,200, which provides roughly 42 TB for five years.</p>
 <h1 id="login-nodes-compute-nodes-and-dtn-nodes">Login nodes, compute nodes, and DTN nodes</h1>
+<p>Savio is a Linux cluster - by cluster we mean a set of computers networked together such that you can:</p>
+<ul>
+<li>access the system by logging into a &quot;login node&quot;</li>
+<li>access your files on the system from any of the computers</li>
+<li>run your computations across one or more of the &quot;compute nodes&quot;
+<ul>
+<li>your work might use parallelization to do computation on more than one CPU</li>
+<li>you can also run &quot;serial&quot; jobs that use a single CPU</li>
+</ul></li>
+</ul>
 <p>Savio has a few different kinds of nodes:</p>
 <ul>
 <li>login nodes: for login and non-intensive interactive work such as job submission and monitoring, basic compilation, managing your disk space</li>
@@ -130,18 +133,28 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <center>
 <img src="savioOverview.jpeg">
 </center>
+<h1 id="savio-computing-nodes">Savio computing nodes</h1>
+<p>Let's take a look at the hardware specifications of the computing nodes on the cluster <a href="http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide">(see the <em>Hardware Configuration</em> section of this document)</a>.</p>
+<p>The nodes are divided into several pools, called partitions. These partitions have different restrictions and costs associated with them <a href="http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide">(see the <em>Scheduler Configuration</em> section of this document)</a>. Any job you submit must be submitted to a partition to which you have access.</p>
+<h1 id="disk-space-options-home-scratch-project-condo-storage">Disk space options (home, scratch, project, condo storage)</h1>
+<p>You have access to the following disk space, described <a href="http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide">here in the <em>Storage and Backup</em> section</a>.</p>
+<p>Those directories (<code>/global/home/users/SAVIO_USERNAME</code>, <code>/global/scratch/SAVIO_USERNAME</code>, <code>/global/home/groups/SAVIO_GROUPNAME</code>) are available from any of the nodes and changes to files on one node will be seen on all the other nodes.</p>
+<p>When reading/writing data to/from disk, unless the amount of data is small, please put the data in your scratch space at <code>/global/scratch/SAVIO_USERNAME</code>. The system is set up so that disk access for all users is optimized when users are doing input/output (I/O) off of scratch rather than off of their home directories. Doing I/O with files on your home directory can impact the ability of others to access their files on the filesystem.</p>
+<p>Large amounts of disk space is available for purchase from the <a href="http://research-it.berkeley.edu/services/high-performance-computing/brc-condo-storage-service-savio"><em>condo storage</em> offering</a>. The minimum purchase is about $6,200, which provides roughly 42 TB for five years.</p>
 <h1 id="logging-in">Logging in</h1>
-<p>To login, you need to have software on your own machine that gives you access to a UNIX terminal (command-line) session. These come built-in with Mac (see <code>Applications -&gt; Utilities -&gt; Terminal</code>). For Windows, some options include <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">PuTTY</a>.</p>
+<p>To login, you need to have software on your own machine that gives you access to a UNIX terminal (command-line) session. These come built-in with Mac (see <code>Applications -&gt; Utilities -&gt; Terminal</code>). For Windows, a good option is <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">PuTTY</a>.</p>
 <p>You also need to set up your smartphone or tablet with <em>Google Authenticator</em> to generate one-time passwords for you.</p>
 <p>Here are instructions for <a href="http://research-it.berkeley.edu/services/high-performance-computing/logging-savio">doing this setup, and for logging in</a>.</p>
 <p>Then to login:</p>
 <pre><code>ssh SAVIO_USERNAME@hpc.brc.berkeley.edu</code></pre>
 <p>Then enter XXXXXYYYYYY where XXXXXX is your PIN and YYYYYY is the one-time password. YYYYYY will be shown when you open your <em>Google authenticator</em> app on your phone/tablet.</p>
-<p>One can then navigate around and get information using standard UNIX commands such as <code>ls</code>, <code>cd</code>, <code>du</code>, <code>df</code>, etc.</p>
+<p>One can then navigate around and get information using standard UNIX commands such as <code>ls</code>, <code>cd</code>, <code>du</code>, <code>df</code>, etc. There is a lot of material online about using the UNIX command line (also called the shell; 'bash' is one common variation). Here is a <a href="https://github.com/berkeley-scf/tutorial-unix-basics">basic tutorial</a>.</p>
 <p>If you want to be able to open programs with graphical user interfaces:</p>
 <pre><code>ssh -Y SAVIO_USERNAME@hpc.brc.berkeley.edu</code></pre>
 <p>To display the graphical windows on your local machine, you'll need X server software on your own machine to manage the graphical windows. For Windows, your options include <em>eXceed</em> or <em>Xming</em> and for Mac, there is <em>XQuartz</em>.</p>
 <h1 id="data-transfer-with-examples-tofrom-laptop-box-google-drive-aws">Data transfer with examples to/from laptop, Box, Google Drive, AWS</h1>
+<p>To do any work on the system, you'll usually need to transfer files (data files, code files, etc.) to the Savio filesystem, either into your home directory, your scratch directory or a group directory.</p>
+<p>And once you're done with a computation, you'll generally need to transfer files back to another place (e.g., your laptop).</p>
 <p>Let's see how we would transfer files/data to/from Savio using a few different approaches.</p>
 <h1 id="data-transfer-scpsftp">Data transfer: SCP/SFTP</h1>
 <p>We can use the <em>scp</em> and <em>sftp</em> protocols to transfer files.</p>
@@ -206,8 +219,17 @@ get zotero.sqlite</code></pre>
 <p>bDrive provides <strong>unlimited</strong>, free, secured, and encrypted content storage of files with a maximum file size of 5 Tb to Berkeley affiliates.</p>
 <p>You can move files to and from your laptop using the Google Drive app.</p>
 <p>There are also some third-party tools for copying files to/from Google Drive, though I've found them to be a bit klunky. This is why we recommend using Box for workflows at this point. However, BRC is also working on making Globus available for transfer to/from bDrive, though it's not available yet.</p>
+<h1 id="editing-files">Editing files</h1>
+<p>You are welcome to edit your files on Savio (rather than copying files back and forth from your laptop and editing them on your laptop). To do so you'll need to use some sort of editor. Savio has <code>vim</code>, <code>emacs</code>, and <code>nano</code> installed. Just start the editor from a login node.</p>
+<pre><code>## To use vim
+vim myfile.txt
+## To use emacs
+emacs myfile.txt
+## To use nano
+module load nano
+nano myfile.txt</code></pre>
 <h1 id="software-modules">Software modules</h1>
-<p>A lot of software is available on Savio but needs to be loaded from the relevant software module before you can use it.</p>
+<p>A lot of software is available on Savio but needs to be loaded from the relevant software module before you can use it. (We do this not to confuse you but to avoid clashes between incompatible software and allow multiple versions of a piece of software to co-exist on the system.)</p>
 <pre><code>module list  # what&#39;s loaded?
 module avail  # what&#39;s available</code></pre>
 <p>One thing that tricks people is that the modules are arranged in a hierarchical (nested) fashion, so you only see some of the modules as being available <em>after</em> you load the parent module (e.g., MKL, FFT, and HDF5/NetCDF software is nested within the gcc module). Here's how we see and load MPI.</p>
@@ -216,8 +238,20 @@ module load gcc
 module avail
 module load openmpi</code></pre>
 <p>Note that a variety of Python packages are directly simply by loading the python module. For R this is not the case, but you can load the <em>r-packages</em> module.</p>
-<h1 id="submitting-jobs-accounts-and-partitions">Submitting jobs: accounts and partitions</h1>
+<h1 id="submitting-jobs-overview">Submitting jobs: overview</h1>
 <p>All computations are done by submitting jobs to the scheduling software that manages jobs on the cluster, called SLURM.</p>
+<p>Why is this necessary? Otherwise your jobs would be slowed down by other people's jobs running on the same node. This also allows everyone to fairly share Savio.</p>
+<p>The basic workflow is:</p>
+<ul>
+<li>login to Savio; you'll end up on one of the login nodes in your home directory</li>
+<li>use <code>cd</code> to go to the directory from which you want to submit the job</li>
+<li>submit the job using <code>sbatch</code> (or an interactive job using <code>srun</code>, discussed later)
+<ul>
+<li>when your job starts the working directory will be the one from which the job was submitted</li>
+<li>the job will be running on a compute node, not the login node</li>
+</ul></li>
+</ul>
+<h1 id="submitting-jobs-accounts-and-partitions">Submitting jobs: accounts and partitions</h1>
 <p>When submitting a job, the main things you need to indicate are the project account you are using (in some cases you might have access to multiple accounts such as an FCA and a condo) and the partition.</p>
 <p>You can see what accounts you have access to and which partitions within those accounts as follows:</p>
 <pre><code>sacctmgr -p show associations user=SAVIO_USERNAME</code></pre>
@@ -313,8 +347,9 @@ wwall -j &lt;JOB_ID&gt;</code></pre>
 </ul>
 <p>There are lots more examples of job submission scripts for different kinds of parallelization (multi-node (MPI), multi-core (openMP), hybrid, etc.) <a href="http://research-it.berkeley.edu/services/high-performance-computing/running-your-jobs#Job-submission-with-specific-resource-requirements">here</a>.</p>
 <h1 id="interactive-jobs">Interactive jobs</h1>
-<p>You can also do work interactively.</p>
+<p>You can also do work interactively. This simply moves you from a login node to a compute node.</p>
 <pre><code>srun -A co_stat -p savio2  --nodes=1 -t 10:0 --pty bash
+# note that you end up in the same working directory as when you submitted the job
 # now execute on the compute node:
 module load matlab
 matlab -nodesktop -nodisplay</code></pre>
@@ -522,17 +557,14 @@ results</code></pre>
 <li>For questions about computing resources in general, including cloud computing:
 <ul>
 <li>brc@berkeley.edu</li>
-<li>office hours: Tues. 10:00-12:00, Wed. 1:30-3:30, Thur. 9:30-11:30 here in AIS</li>
+<li>office hours: Wed. 1:30-3:30 and Thur. 9:30-11:00 here in AIS</li>
 </ul></li>
 <li>For questions about data management (including HIPAA-protected data):
 <ul>
 <li>researchdata@berkeley.edu</li>
-<li>office hours: Tues. 10:00-12:00, Wed. 1:30-3:30, Thur. 9:30-11:30 here in AIS</li>
+<li>office hours: Wed. 1:30-3:30 and Thur. 9:30-11:00 here in AIS</li>
 </ul></li>
 </ul>
 <h1 id="upcoming-events">Upcoming events</h1>
-<ul>
-<li>Savio hands-on installation workshop, mid-late October or early November.</li>
-</ul>
 </body>
 </html>

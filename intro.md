@@ -9,7 +9,7 @@ We'll do this mostly as a demonstration. We encourage you to login to your accou
 
 Much of this material is based on the extensive Savio documention we have prepared and continue to prepare, available at [http://research-it.berkeley.edu/services/high-performance-computing](http://research-it.berkeley.edu/services/high-performance-computing).
 
-The materials for this tutorial are available using git at the short URL [bit.do/F18Savio](http://bit.do/F18Savio), the  GitHub URL [https://github.com/ucberkeley/savio-training-intro-spring-2019](https://github.com/ucberkeley/savio-training-intro-spring-2019), or simply as a [zip file](https://github.com/ucberkeley/savio-training-intro-spring-2019/archive/master.zip).
+The materials for this tutorial are available using git at the short URL [bit.do/S19Savio](http://bit.do/S19Savio), the  GitHub URL [https://github.com/ucberkeley/savio-training-intro-spring-2019](https://github.com/ucberkeley/savio-training-intro-spring-2019), or simply as a [zip file](https://github.com/ucberkeley/savio-training-intro-spring-2019/archive/master.zip).
 
 # Outline
 
@@ -17,10 +17,10 @@ This training session will cover the following topics:
 
  - System capabilities and hardware
      - Getting access to the system - FCA, condo, ICA
+     - Login nodes, compute nodes, and DTN nodes
      - Savio computing nodes
      - Disk space options (home, scratch, condo storage)
  - Logging in, data transfer, and software
-     - Login nodes, compute nodes, and DTN nodes 
      - Logging in
      - Data transfer 
         - SCP/SFTP
@@ -89,7 +89,7 @@ The nodes are divided into several pools, called partitions. These partitions ha
 
 You have access to the following disk space, described [here in the *Storage and Backup* section](http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide).
 
-Those directories (`/global/home/users/SAVIO_USERNAME`, `/global/scratch/SAVIO_USERNAME`, `/global/home/groups/SAVIO_GROUPNAME`) are available from any of the nodes and changes made on one node will be seen on all the other nodes. 
+Those directories (`/global/home/users/SAVIO_USERNAME`, `/global/scratch/SAVIO_USERNAME`, `/global/home/groups/SAVIO_GROUPNAME`) are available from any of the nodes and changes to files on one node will be seen on all the other nodes. 
 
 When reading/writing data to/from disk, unless the amount of data is small, please put the data in your scratch space at `/global/scratch/SAVIO_USERNAME`. The system is set up so that disk access for all users is optimized when users are doing input/output (I/O) off of scratch rather than off of their home directories. Doing I/O with files on your home directory can impact the ability of others to access their files on the filesystem. 
 
@@ -98,7 +98,7 @@ Large amounts of disk space is available for purchase from the [*condo storage* 
 
 # Logging in
 
-To login, you need to have software on your own machine that gives you access to a UNIX terminal (command-line) session. These come built-in with Mac (see `Applications -> Utilities -> Terminal`). For Windows, some options include [PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html).
+To login, you need to have software on your own machine that gives you access to a UNIX terminal (command-line) session. These come built-in with Mac (see `Applications -> Utilities -> Terminal`). For Windows, a good option is [PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html).
 
 You also need to set up your smartphone or tablet with *Google Authenticator* to generate one-time passwords for you.
 
@@ -111,7 +111,7 @@ ssh SAVIO_USERNAME@hpc.brc.berkeley.edu
 
 Then enter XXXXXYYYYYY where XXXXXX is your PIN and YYYYYY is the one-time password. YYYYYY will be shown when you open your *Google authenticator* app on your phone/tablet.
 
-One can then navigate around and get information using standard UNIX commands such as `ls`, `cd`, `du`, `df`, etc.
+One can then navigate around and get information using standard UNIX commands such as `ls`, `cd`, `du`, `df`, etc. There is a lot of material online about using the UNIX command line (also called the shell; 'bash' is one common variation). Here is a [basic tutorial](https://github.com/berkeley-scf/tutorial-unix-basics).
 
 If you want to be able to open programs with graphical user interfaces:
 ```
@@ -242,8 +242,11 @@ There are also some third-party tools for copying files to/from Google Drive, th
 You are welcome to edit your files on Savio (rather than copying files back and forth from your laptop and editing them on your laptop). To do so you'll need to use some sort of editor. Savio has `vim`, `emacs`, and `nano` installed. Just start the editor from a login node.
 
 ```
+## To use vim
 vim myfile.txt
+## To use emacs
 emacs myfile.txt
+## To use nano
 module load nano
 nano myfile.txt
 ```
@@ -715,12 +718,12 @@ In addition to iPyParallel, one of the newer tools in the Python space is [Dask]
     - brc-hpc-help@berkeley.edu
  - For questions about computing resources in general, including cloud computing: 
     - brc@berkeley.edu
-    - office hours: Tues. 10:00-12:00, Wed. 1:30-3:30, Thur. 9:30-11:30 here in AIS
+    - office hours: Wed. 1:30-3:30 and Thur. 9:30-11:00 here in AIS
  - For questions about data management (including HIPAA-protected data): 
     - researchdata@berkeley.edu
-    - office hours: Tues. 10:00-12:00, Wed. 1:30-3:30, Thur. 9:30-11:30 here in AIS
+    - office hours: Wed. 1:30-3:30 and Thur. 9:30-11:00 here in AIS
 
 
 # Upcoming events
 
- - Savio hands-on installation workshop, mid-late October or early November.
+
