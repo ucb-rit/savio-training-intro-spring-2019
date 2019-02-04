@@ -247,7 +247,7 @@ module load openmpi</code></pre>
 <li>use <code>cd</code> to go to the directory from which you want to submit the job</li>
 <li>submit the job using <code>sbatch</code> (or an interactive job using <code>srun</code>, discussed later)
 <ul>
-<li>when your job starts the working directory will be the one from which the job was submitted</li>
+<li>when your job starts, the working directory will be the one from which the job was submitted</li>
 <li>the job will be running on a compute node, not the login node</li>
 </ul></li>
 </ul>
@@ -359,7 +359,7 @@ matlab -nodesktop -nodisplay</code></pre>
 <p>If you are running a graphical interface, we recommend you use Savio's remote desktop service on our visualization node, as described <a href="http://research-it.berkeley.edu/services/high-performance-computing/using-brc-visualization-node-realvnc">here</a>.</p>
 <h1 id="low-priority-queue">Low-priority queue</h1>
 <p>Condo users have access to the broader compute resource that is limited only by the size of partitions, under the <em>savio_lowprio</em> QoS (queue). However this QoS does not get a priority as high as the general QoSs, such as <em>savio_normal</em> and <em>savio_debug</em>, or all the condo QoSs, and it is subject to preemption when all the other QoSs become busy.</p>
-<p>More details can be found <a href="http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide">in the <em>Low Priority Jobs</em> section of the user guide</a>.</p>
+<p>More details can be found <a href="http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide#Low_Priority">in the <em>Low Priority Jobs</em> section of the user guide</a>.</p>
 <p>Suppose I wanted to burst beyond the Statistics condo to run on 20 nodes. I'll illustrate here with an interactive job though usually this would be for a batch job.</p>
 <pre><code>srun -A co_stat -p savio2 --qos=savio_lowprio --nodes=20 -t 10:0 --pty bash
 ## now look at environment variables to see my job can access 20 nodes:
@@ -396,7 +396,7 @@ sinfo -p savio2_gpu</code></pre>
 <pre><code>scancel YOUR_JOB_ID</code></pre>
 <p>For more information on cores, QoS, and additional (e.g., GPU) resources, here's some syntax:</p>
 <pre><code>squeue -o &quot;%.7i %.12P %.20j %.8u %.2t %.9M %.5C %.8r %.3D %.20R %.8p %.20q %b&quot; </code></pre>
-<p>We provide some <a href="http://research-it.berkeley.edu/services/high-performance-computing/running-your-jobs">tips about monitoring your jobs</a>. (Scroll down to the &quot;Monitoring jobs&quot; section.)</p>
+<p>We provide some <a href="http://research-it.berkeley.edu/services/high-performance-computing/running-your-jobs#Monitoring">tips about monitoring your jobs</a>.</p>
 <p>If you'd like to see how much of an FCA has been used:</p>
 <pre><code>check_usage.sh -a fc_popgen </code></pre>
 <h1 id="example-use-of-standard-software-ipython-and-r-notebooks-through-jupyterhub">Example use of standard software: IPython and R notebooks through JupyterHub</h1>

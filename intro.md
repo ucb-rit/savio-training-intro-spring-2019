@@ -282,7 +282,7 @@ The basic workflow is:
  - login to Savio; you'll end up on one of the login nodes in your home directory
  - use `cd` to go to the directory from which you want to submit the job
  - submit the job using `sbatch` (or an interactive job using `srun`, discussed later)
-    - when your job starts the working directory will be the one from which the job was submitted
+    - when your job starts, the working directory will be the one from which the job was submitted
     - the job will be running on a compute node, not the login node
 
 # Submitting jobs: accounts and partitions
@@ -447,7 +447,7 @@ If you are running a graphical interface, we recommend you use Savio's remote de
 
 Condo users have access to the broader compute resource that is limited only by the size of partitions, under the *savio_lowprio* QoS (queue). However this QoS does not get a priority as high as the general QoSs, such as *savio_normal* and *savio_debug*, or all the condo QoSs, and it is subject to preemption when all the other QoSs become busy. 
 
-More details can be found [in the *Low Priority Jobs* section of the user guide](http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide).
+More details can be found [in the *Low Priority Jobs* section of the user guide](http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide#Low_Priority).
 
 Suppose I wanted to burst beyond the Statistics condo to run on 20 nodes. I'll illustrate here with an interactive job though usually this would be for a batch job.
 
@@ -507,12 +507,12 @@ For more information on cores, QoS, and additional (e.g., GPU) resources, here's
 squeue -o "%.7i %.12P %.20j %.8u %.2t %.9M %.5C %.8r %.3D %.20R %.8p %.20q %b" 
 ```
 
-We provide some [tips about monitoring your jobs](http://research-it.berkeley.edu/services/high-performance-computing/running-your-jobs). (Scroll down to the "Monitoring jobs" section.)
+We provide some [tips about monitoring your jobs](http://research-it.berkeley.edu/services/high-performance-computing/running-your-jobs#Monitoring). 
 
 If you'd like to see how much of an FCA has been used:
 
 ```
-check_usage.sh -a fc_popgen 
+check_usage.sh -a fc_ribosome 
 ```
 
 
