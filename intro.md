@@ -726,4 +726,13 @@ In addition to iPyParallel, one of the newer tools in the Python space is [Dask]
 
 # Upcoming events
 
+There are a number of other Love Data week events (in addition to this one)...
+
+  - Code Ocean lunch & learn; Tuesday 12:00-1:00 pm, Doe Library, Room 190 (BIDS)
+  - Preparing your data and code for reproducible publication; Wednesday 2:00-4:00 pm, Doe Library, Room 190 (BIDS)
+  - Shaping Clouds: Scaling Infrastructure for Research and Instruction at Berkeley; Thursday 1:00-2:00 pm, Doe Library, Room 190 (BIDS)
+  - Data Security: I just called to say I love you; Friday 1:00-2:00 pm, Dwinelle 127 (Academic Innovation Studio)
+
+To register for these events and find out more, please visit: [https://guides.lib.berkeley.edu/ldw2019](https://guides.lib.berkeley.edu/ldw2019).
+
 
