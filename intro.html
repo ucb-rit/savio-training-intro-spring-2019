@@ -54,7 +54,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1 id="introduction">Introduction</h1>
 <p>We'll do this mostly as a demonstration. We encourage you to login to your account and try out the various examples yourself as we go through them.</p>
 <p>Much of this material is based on the extensive Savio documention we have prepared and continue to prepare, available at <a href="http://research-it.berkeley.edu/services/high-performance-computing" class="uri">http://research-it.berkeley.edu/services/high-performance-computing</a>.</p>
-<p>The materials for this tutorial are available using git at the short URL <a href="https://bit.do/s19Savio">bit.do/S19Savio</a>, the GitHub URL <a href="https://github.com/ucb-rit/savio-training-intro-spring-2019" class="uri">https://github.com/ucb-rit/savio-training-intro-spring-2019</a>, or simply as a <a href="https://github.com/ucb-rit/savio-training-intro-spring-2019/archive/master.zip">zip file</a>.</p>
+<p>The materials for this tutorial are available using git at the short URL <a href="https://bit.do/s19Savio">bit.do/s19Savio</a>, the GitHub URL <a href="https://github.com/ucb-rit/savio-training-intro-spring-2019" class="uri">https://github.com/ucb-rit/savio-training-intro-spring-2019</a>, or simply as a <a href="https://github.com/ucb-rit/savio-training-intro-spring-2019/archive/master.zip">zip file</a>.</p>
 <h1 id="outline">Outline</h1>
 <p>This training session will cover the following topics:</p>
 <ul>
@@ -252,7 +252,7 @@ module load openmpi</code></pre>
 </ul></li>
 </ul>
 <h1 id="submitting-jobs-accounts-and-partitions">Submitting jobs: accounts and partitions</h1>
-<p>When submitting a job, the main things you need to indicate are the project account you are using (in some cases you might have access to multiple accounts such as an FCA and a condo) and the partition.</p>
+<p>When submitting a job, the main things you need to indicate are the project account you are using and the partition. Note that their is a default value for the project account, but if you have access to multiple accounts such as an FCA and a condo, it's good practice to specify it.</p>
 <p>You can see what accounts you have access to and which partitions within those accounts as follows:</p>
 <pre><code>sacctmgr -p show associations user=SAVIO_USERNAME</code></pre>
 <p>Here's an example of the output for a user who has access to an FCA, a condo, and a special partner account:</p>
@@ -273,8 +273,8 @@ brc|fc_paciorek|paciorek|savio2_bigmem|1||||||||||||savio_debug,savio_normal|sav
 brc|fc_paciorek|paciorek|savio2|1||||||||||||savio_debug,savio_normal|savio_normal||
 brc|fc_paciorek|paciorek|savio|1||||||||||||savio_debug,savio_normal|savio_normal||
 brc|fc_paciorek|paciorek|savio_bigmem|1||||||||||||savio_debug,savio_normal|savio_normal||</code></pre>
-<p>If you are part of a condo, you'll notice that you have <em>low-priority</em> access to certain partitions. For example I am part of the statistics condo <em>co_stat</em>, which owns some Savio2 nodes and Savio2_gpu and therefore I have normal access to those, but I can also burst beyond the condo and use other partitions at low-priority (see below).</p>
-<p>In contrast, through my FCA, I have access to the savio, savio2, and big memory partitions.</p>
+<p>If you are part of a condo, you'll notice that you have <em>low-priority</em> access to certain partitions. For example I am part of the statistics condo <em>co_stat</em>, which owns some savio2 nodes and savio2_gpu nodes and therefore I have normal access to those, but I can also burst beyond the condo and use other partitions at low-priority (see below).</p>
+<p>In contrast, through my FCA, I have access to the savio, savio2, big memory, HTC, and GPU partitions all at normal priority.</p>
 <h1 id="submitting-a-batch-job">Submitting a batch job</h1>
 <p>Let's see how to submit a simple job. If your job will only use the resources on a single node, you can do the following.</p>
 <p>Here's an example job script that I'll run. You'll need to modify the --account value and possibly the --partition value.</p>
@@ -361,12 +361,14 @@ matlab -nodesktop -nodisplay</code></pre>
 <p>Condo users have access to the broader compute resource that is limited only by the size of partitions, under the <em>savio_lowprio</em> QoS (queue). However this QoS does not get a priority as high as the general QoSs, such as <em>savio_normal</em> and <em>savio_debug</em>, or all the condo QoSs, and it is subject to preemption when all the other QoSs become busy.</p>
 <p>More details can be found <a href="http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide#Low_Priority">in the <em>Low Priority Jobs</em> section of the user guide</a>.</p>
 <p>Suppose I wanted to burst beyond the Statistics condo to run on 20 nodes. I'll illustrate here with an interactive job though usually this would be for a batch job.</p>
-<pre><code>srun -A co_stat -p savio2 --qos=savio_lowprio --nodes=20 -t 10:0 --pty bash
+<p>First I'll see if there are that many nodes even available.</p>
+<pre><code>sinfo -p savio2
+srun -A co_stat -p savio2 --qos=savio_lowprio --nodes=20 -t 10:00 --pty bash
 ## now look at environment variables to see my job can access 20 nodes:
 env | grep SLURM</code></pre>
 <h1 id="htc-jobs">HTC jobs</h1>
 <p>There is a partition called the HTC partition that allows you to request cores individually rather than an entire node at a time. The nodes in this partition are faster than the other nodes.</p>
-<pre><code>srun -A co_stat -p savio2_htc --cpus-per-task=2 -t 10:0 --pty bash
+<pre><code>srun -A co_stat -p savio2_htc --cpus-per-task=2 -t 10:00 --pty bash
 ## we can look at environment variables to verify our two cores
 env | grep SLURM
 module load python
@@ -540,7 +542,7 @@ results &lt;- foreach(destVal = destVals) %dopar% {
 
 results</code></pre>
 <h1 id="alternative-python-parallelization-dask">Alternative Python Parallelization: Dask</h1>
-<p>In addition to iPyParallel, one of the newer tools in the Python space is <a href="http://dask.pydata.org/en/latest/">Dask</a>, which provides out-of-the-box parallelization more easily without much setup or too much additional. Dask, as a python package, extends Numpy/Pandas syntax for arrays and dataframes that already exists and introduces native parallelization to these data structures, which speeds up analyses. Since Dask dataframes/arrays are descendants of the Pandas dataframe and Numpy array, they are compatible with any existing code and can serve as a plug-in replacement, with performance enhancements for multiple cores/nodes. It's also worth noting that Dask is useful for scaling up to large clusters like Savio but can also be useful for speeding up analyses on your local computer. We're including some articles and documentation that may be helpful in getting started:</p>
+<p>In addition to iPyParallel, one of the newer tools in the Python space is <a href="http://dask.pydata.org/en/latest/">Dask</a>, which provides out-of-the-box parallelization more easily without much setup or too much additional work. Dask, as a Python package, extends Numpy/Pandas syntax for arrays and dataframes that already exists and introduces native parallelization to these data structures, which speeds up analyses. Since Dask dataframes/arrays are descendants of the Pandas dataframe and Numpy array, they are compatible with any existing code and can serve as a plug-in replacement, with performance enhancements for multiple cores/nodes. It's also worth noting that Dask is useful for scaling up to large clusters like Savio but can also be useful for speeding up analyses on your local computer. We're including some articles and documentation that may be helpful in getting started:</p>
 <ul>
 <li><a href="https://dask.pydata.org/en/latest/why.html">Why Dask?</a></li>
 <li><a href="https://www.youtube.com/watch?v=ods97a5Pzw0">Standard Dask Demo</a></li>
@@ -566,5 +568,13 @@ results</code></pre>
 </ul></li>
 </ul>
 <h1 id="upcoming-events">Upcoming events</h1>
+<p>There are a number of other Love Data week events (in addition to this one)...</p>
+<ul>
+<li>Code Ocean lunch &amp; learn; Tuesday 12:00-1:00 pm, Doe Library, Room 190 (BIDS)</li>
+<li>Preparing your data and code for reproducible publication; Wednesday 2:00-4:00 pm, Doe Library, Room 190 (BIDS)</li>
+<li>Shaping Clouds: Scaling Infrastructure for Research and Instruction at Berkeley; Thursday 1:00-2:00 pm, Doe Library, Room 190 (BIDS)</li>
+<li>Data Security: I just called to say I love you; Friday 1:00-2:00 pm, Dwinelle 127 (Academic Innovation Studio)</li>
+</ul>
+<p>To register for these events and find out more, please visit: <a href="https://guides.lib.berkeley.edu/ldw2019" class="uri">https://guides.lib.berkeley.edu/ldw2019</a>.</p>
 </body>
 </html>

@@ -316,9 +316,9 @@ brc|fc_paciorek|paciorek|savio|1||||||||||||savio_debug,savio_normal|savio_norma
 brc|fc_paciorek|paciorek|savio_bigmem|1||||||||||||savio_debug,savio_normal|savio_normal||
 ```
 
-If you are part of a condo, you'll notice that you have *low-priority* access to certain partitions. For example I am part of the statistics condo *co_stat*, which owns some Savio2 nodes and Savio2_gpu and therefore I have normal access to those, but I can also burst beyond the condo and use other partitions at low-priority (see below).
+If you are part of a condo, you'll notice that you have *low-priority* access to certain partitions. For example I am part of the statistics condo *co_stat*, which owns some savio2 nodes and savio2_gpu nodes and therefore I have normal access to those, but I can also burst beyond the condo and use other partitions at low-priority (see below).
 
-In contrast, through my FCA, I have access to the savio, savio2, and big memory partitions.
+In contrast, through my FCA, I have access to the savio, savio2, big memory, HTC, and GPU partitions all at normal priority.
 
 # Submitting a batch job
 
@@ -451,8 +451,11 @@ More details can be found [in the *Low Priority Jobs* section of the user guide]
 
 Suppose I wanted to burst beyond the Statistics condo to run on 20 nodes. I'll illustrate here with an interactive job though usually this would be for a batch job.
 
+First I'll see if there are that many nodes even available.
+
 ```
-srun -A co_stat -p savio2 --qos=savio_lowprio --nodes=20 -t 10:0 --pty bash
+sinfo -p savio2
+srun -A co_stat -p savio2 --qos=savio_lowprio --nodes=20 -t 10:00 --pty bash
 ## now look at environment variables to see my job can access 20 nodes:
 env | grep SLURM
 ```
@@ -462,7 +465,7 @@ env | grep SLURM
 There is a partition called the HTC partition that allows you to request cores individually rather than an entire node at a time. The nodes in this partition are faster than the other nodes.
 
 ```
-srun -A co_stat -p savio2_htc --cpus-per-task=2 -t 10:0 --pty bash
+srun -A co_stat -p savio2_htc --cpus-per-task=2 -t 10:00 --pty bash
 ## we can look at environment variables to verify our two cores
 env | grep SLURM
 module load python
@@ -704,7 +707,7 @@ results
 ```
 
 # Alternative Python Parallelization: Dask
-In addition to iPyParallel, one of the newer tools in the Python space is [Dask](http://dask.pydata.org/en/latest/), which provides out-of-the-box parallelization more easily without much setup or too much additional. Dask, as a python package, extends Numpy/Pandas syntax for arrays and dataframes that already exists and introduces native parallelization to these data structures, which speeds up analyses. Since Dask dataframes/arrays are descendants of the Pandas dataframe and Numpy array, they are compatible with any existing code and can serve as a plug-in replacement, with performance enhancements for multiple cores/nodes. It's also worth noting that Dask is useful for scaling up to large clusters like Savio but can also be useful for speeding up analyses on your local computer. We're including some articles and documentation that may be helpful in getting started:     
+In addition to iPyParallel, one of the newer tools in the Python space is [Dask](http://dask.pydata.org/en/latest/), which provides out-of-the-box parallelization more easily without much setup or too much additional work. Dask, as a Python package, extends Numpy/Pandas syntax for arrays and dataframes that already exists and introduces native parallelization to these data structures, which speeds up analyses. Since Dask dataframes/arrays are descendants of the Pandas dataframe and Numpy array, they are compatible with any existing code and can serve as a plug-in replacement, with performance enhancements for multiple cores/nodes. It's also worth noting that Dask is useful for scaling up to large clusters like Savio but can also be useful for speeding up analyses on your local computer. We're including some articles and documentation that may be helpful in getting started:     
 
 - [Why Dask?](https://dask.pydata.org/en/latest/why.html)
 - [Standard Dask Demo](https://www.youtube.com/watch?v=ods97a5Pzw0)
