@@ -287,7 +287,7 @@ The basic workflow is:
 
 # Submitting jobs: accounts and partitions
 
-When submitting a job, the main things you need to indicate are the project account you are using (in some cases you might have access to multiple accounts such as an FCA and a condo) and the partition.
+When submitting a job, the main things you need to indicate are the project account you are using and the partition. Note that their is a default value for the project account, but if you have access to multiple accounts such as an FCA and a condo, it's good practice to specify it.
 
 You can see what accounts you have access to and which partitions within those accounts as follows:
 
