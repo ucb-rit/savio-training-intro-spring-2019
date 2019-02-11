@@ -202,6 +202,7 @@ BRC is working (long-term) on making Globus available for transfer to/from Box a
 [rclone](https://rclone.org/) is a command line program that you can use to sync files between both services and Savio. You can read [instructions for using rclone on Savio here](http://research-it.berkeley.edu/services/research-data-management-service/take-advantage-unlimited-bdrive-and-box-storage-using)
 
 Configuration (on dtn): ```rclone config```
+
  - Use auto config? -> n
  - For Box: install rclone on your PC, then run ```rclone authorize "box"```
  - Paste the link into your browser and log in to your CalNet account
