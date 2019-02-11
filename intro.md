@@ -193,12 +193,21 @@ You can interact with both services via web browser, and both services provide a
  - [bDrive web app](http://bdrive.berkeley.edu/)
  - [Drive desktop app](https://www.google.com/drive/download/)
 
+For more ambitious users, Box has a Python-based SDK that can be used to write scripts for file transfers. For more information on how to do this, check out the `BoxAuthenticationBootstrap.ipynb` and `TransferFilesFromBoxToSavioScratch.ipynb` from BRC's cyberinfrastructure engineer on [GitHub](https://github.com/ucberkeley/brc-cyberinfrastructure/tree/dev/analysis-workflows/notebooks)
+
+BRC is working (long-term) on making Globus available for transfer to/from Box and bDrive, but it's not available yet.
+
+# Data transfer: Box & bDrive with rclone
+
 [rclone](https://rclone.org/) is a command line program that you can use to sync files between both services and Savio. You can read [instructions for using rclone on Savio here](http://research-it.berkeley.edu/services/research-data-management-service/take-advantage-unlimited-bdrive-and-box-storage-using)
 
-Briefly, configuring rclone is done by running ```rclone config``` on Savio and following the instructions. The default options mostly work, but you should select "N" when asked if you want to use autoconfigure. For Box, you will need to have rclone installed on your local machine and run ```rclone authorize "box"``` there to complete authentication. For both services you will then need to paste a link into your browser and log in to your CalNet account to allow rclone access. You will then be given an authentication token, either in your browser or local terminal, which you paste into the ```rclone config``` prompt on Savio.
+Configuration (on dtn): ```rclone config```
+ - Use auto config? -> n
+ - For Box: install rclone on your PC, then run ```rclone authorize "box"```
+ - Paste the link into your browser and log in to your CalNet account
+ - Copy the authentication token and paste into the ```rclone config``` prompt on Savio
 
-Once you've successfully configured rclone you can sync files back and forth between Savio and Box/bDrive using commands akin to the standard command line tools.
-
+rclone commands:
 ```
 rclone listremotes # Lists configured remotes.
 rclone lsd remote_name: # Lists directories, but not files. Note the trailing colon.
@@ -208,11 +217,6 @@ rclone copy /global/scratch/hannsode/genomes remote_name:genome_sequences # Copi
 ```
 
 Finally you can set up [special purpose accounts](https://calnetweb.berkeley.edu/calnet-departments/special-purpose-accounts-spa) so files are owned at a project level rather than by individuals.
-
-For more ambitious users, Box has a Python-based SDK that can be used to write scripts for file transfers. For more information on how to do this, check out the `BoxAuthenticationBootstrap.ipynb` and `TransferFilesFromBoxToSavioScratch.ipynb` from BRC's cyberinfrastructure engineer on [GitHub](https://github.com/ucberkeley/brc-cyberinfrastructure/tree/dev/analysis-workflows/notebooks)
-
-BRC is working (long-term) on making Globus available for transfer to/from Box and bDrive, but it's not available yet.
-
 
 # Editing files
 
