@@ -160,12 +160,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>You need to use the Savio data transfer node, <code>dtn.brc.berkeley.edu</code>. The file <code>bayArea.csv</code> is too large to store on Github; you can obtain it <a href="https://www.stat.berkeley.edu/share/paciorek/bayArea.csv">here</a>.</p>
 <p>Linux/Mac:</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># to Savio, while on your local machine</span>
-<span class="kw">scp</span> bayArea.csv paciorek@dtn.brc.berkeley.edu:~/.
-<span class="kw">scp</span> bayArea.csv paciorek@dtn.brc.berkeley.edu:~/data/newName.csv
-<span class="kw">scp</span> bayArea.csv paciorek@dtn.brc.berkeley.edu:/global/scratch/paciorek/.
+<span class="fu">scp</span> bayArea.csv paciorek@dtn.brc.berkeley.edu:~/.
+<span class="fu">scp</span> bayArea.csv paciorek@dtn.brc.berkeley.edu:~/data/newName.csv
+<span class="fu">scp</span> bayArea.csv paciorek@dtn.brc.berkeley.edu:/global/scratch/paciorek/.
 
 <span class="co"># from Savio, while on your local machine</span>
-<span class="kw">scp</span> paciorek@dtn.brc.berkeley.edu:~/data/newName.csv ~/Desktop/.</code></pre></div>
+<span class="fu">scp</span> paciorek@dtn.brc.berkeley.edu:~/data/newName.csv ~/Desktop/.</code></pre></div>
 <p>If you can ssh to your local machine or want to transfer files to other systems on to which you can ssh, you can login to the dtn node to execute the scp commands:</p>
 <pre><code>ssh SAVIO_USERNAME@dtn.brc.berkeley.edu
 [SAVIO_USERNAME@dtn ~]$ scp ~/file.csv OTHER_USERNAME@other.domain.edu:~/data/.</code></pre>
@@ -196,17 +196,18 @@ tar -xvzf files.tgz</code></pre>
 <li><a href="http://bdrive.berkeley.edu/">bDrive web app</a></li>
 <li><a href="https://www.google.com/drive/download/">Drive desktop app</a></li>
 </ul>
+<p>For more ambitious users, Box has a Python-based SDK that can be used to write scripts for file transfers. For more information on how to do this, check out the <code>BoxAuthenticationBootstrap.ipynb</code> and <code>TransferFilesFromBoxToSavioScratch.ipynb</code> from BRC's cyberinfrastructure engineer on <a href="https://github.com/ucberkeley/brc-cyberinfrastructure/tree/dev/analysis-workflows/notebooks">GitHub</a></p>
+<p>BRC is working (long-term) on making Globus available for transfer to/from Box and bDrive, but it's not available yet.</p>
+<h1 id="data-transfer-box-bdrive-with-rclone">Data transfer: Box &amp; bDrive with rclone</h1>
 <p><a href="https://rclone.org/">rclone</a> is a command line program that you can use to sync files between both services and Savio. You can read <a href="http://research-it.berkeley.edu/services/research-data-management-service/take-advantage-unlimited-bdrive-and-box-storage-using">instructions for using rclone on Savio here</a></p>
-<p>Briefly, configuring rclone is done by running <code>rclone config</code> on Savio and following the instructions. The default options mostly work, but you should select &quot;N&quot; when asked if you want to use autoconfigure. For Box, you will need to have rclone installed on your local machine and run <code>rclone authorize &quot;box&quot;</code> there to complete authentication. For both services you will then need to paste a link into your browser and log in to your CalNet account to allow rclone access. You will then be given an authentication token, either in your browser or local terminal, which you paste into the <code>rclone config</code> prompt on Savio.</p>
-<p>Once you've successfully configured rclone you can sync files back and forth between Savio and Box/bDrive using commands akin to the standard command line tools.</p>
+<p>Configuration (on dtn): <code>rclone config</code> - Use auto config? -&gt; n - For Box: install rclone on your PC, then run <code>rclone authorize &quot;box&quot;</code> - Paste the link into your browser and log in to your CalNet account - Copy the authentication token and paste into the <code>rclone config</code> prompt on Savio</p>
+<p>rclone commands:</p>
 <pre><code>rclone listremotes # Lists configured remotes.
 rclone lsd remote_name: # Lists directories, but not files. Note the trailing colon.
 rclone size remote_name:home # Prints size and number of objects in remote &quot;home&quot; directory. This can take a very long time when tallying Tbs of files.
 rclone copy /global/home/users/hannsode remote_name:savio_home/hannsode # Copies my entire home directory to a new directory on the remote.
 rclone copy /global/scratch/hannsode/genomes remote_name:genome_sequences # Copies entire directory contents to a dirctory on the remote with a new name.</code></pre>
 <p>Finally you can set up <a href="https://calnetweb.berkeley.edu/calnet-departments/special-purpose-accounts-spa">special purpose accounts</a> so files are owned at a project level rather than by individuals.</p>
-<p>For more ambitious users, Box has a Python-based SDK that can be used to write scripts for file transfers. For more information on how to do this, check out the <code>BoxAuthenticationBootstrap.ipynb</code> and <code>TransferFilesFromBoxToSavioScratch.ipynb</code> from BRC's cyberinfrastructure engineer on <a href="https://github.com/ucberkeley/brc-cyberinfrastructure/tree/dev/analysis-workflows/notebooks">GitHub</a></p>
-<p>BRC is working (long-term) on making Globus available for transfer to/from Box and bDrive, but it's not available yet.</p>
 <h1 id="editing-files">Editing files</h1>
 <p>You are welcome to edit your files on Savio (rather than copying files back and forth from your laptop and editing them on your laptop). To do so you'll need to use some sort of editor. Savio has <code>vim</code>, <code>emacs</code>, and <code>nano</code> installed. Just start the editor from a login node.</p>
 <pre><code>## To use vim
@@ -280,8 +281,8 @@ brc|fc_paciorek|paciorek|savio_bigmem|1||||||||||||savio_debug,savio_normal|savi
 <span class="co">#SBATCH --time=00:00:30</span>
 <span class="co">#</span>
 <span class="co">## Command(s) to run:</span>
-<span class="kw">module</span> load python/3.6
-<span class="kw">python</span> calc.py <span class="kw">&gt;&amp;</span> <span class="kw">calc.out</span></code></pre></div>
+<span class="ex">module</span> load python/3.6
+<span class="ex">python</span> calc.py <span class="op">&gt;</span><span class="kw">&amp;</span> <span class="ex">calc.out</span></code></pre></div>
 <p>Now let's submit and monitor the job:</p>
 <pre><code>sbatch job.sh
 
@@ -323,8 +324,8 @@ wwall -j &lt;JOB_ID&gt;</code></pre>
 <span class="co">#SBATCH --time=00:00:30</span>
 <span class="co">#</span>
 <span class="co">## Command(s) to run (example):</span>
-<span class="kw">module</span> load intel openmpi
-<span class="kw">mpirun</span> ./a.out</code></pre></div>
+<span class="ex">module</span> load intel openmpi
+<span class="ex">mpirun</span> ./a.out</code></pre></div>
 <p>When you write your code, you may need to specify information about the number of cores to use. SLURM will provide a variety of variables that you can use in your code so that it adapts to the resources you have requested rather than being hard-coded.</p>
 <p>Here are some of the variables that may be useful: SLURM_NTASKS, SLURM_CPUS_PER_TASK, SLURM_NODELIST, SLURM_NNODES.</p>
 <p>Some common paradigms are:</p>
@@ -473,11 +474,11 @@ parallel_result</code></pre>
 <p>Let's see a basic example of doing an analysis in R across multiple cores on multiple nodes. We'll use the airline departure data in <em>bayArea.csv</em>.</p>
 <p>We'll do this interactively though often this sort of thing would be done via a batch job.</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># remember to do I/O off scratch</span>
-<span class="kw">cp</span> bayArea.csv /global/scratch/paciorek/.
+<span class="fu">cp</span> bayArea.csv /global/scratch/paciorek/.
 
-<span class="kw">srun</span> -A co_stat -p savio2  --nodes=2 --ntasks-per-node=24 -t 30:0 --pty bash
-<span class="kw">module</span> load r/3.4.2 r-packages 
-<span class="kw">mpirun</span> R CMD BATCH --no-save parallel-multi.R parallel-multi.Rout <span class="kw">&amp;</span></code></pre></div>
+<span class="ex">srun</span> -A co_stat -p savio2  --nodes=2 --ntasks-per-node=24 -t 30:0 --pty bash
+<span class="ex">module</span> load r/3.4.2 r-packages 
+<span class="ex">mpirun</span> R CMD BATCH --no-save parallel-multi.R parallel-multi.Rout <span class="kw">&amp;</span></code></pre></div>
 <p>Now here's the R code (see <em>parallel-multi.R</em>) we're running:</p>
 <pre><code>library(doMPI)
 
