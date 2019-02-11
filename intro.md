@@ -25,8 +25,7 @@ This training session will cover the following topics:
      - Data transfer 
         - SCP/SFTP
         - Globus
-        - Box 
-        - bDrive (Google drive)
+        - Box & bDrive (Google drive)
      - Software modules
  - Submitting and monitoring jobs
      - Acounts and partitions
@@ -77,13 +76,13 @@ Savio has a few different kinds of nodes:
  - data transfer nodes: for transferring data to/from Savio
  - compute nodes: for computational tasks
 
-<center><img src="savioOverview.jpeg"></center>
+<center><img src="savio_diagram.jpeg"></center>
 
 # Savio computing nodes
 
 Let's take a look at the hardware specifications of the computing nodes on the cluster [(see the *Hardware Configuration* section of this document)](http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide).
 
-The nodes are divided into several pools, called partitions. These partitions have different restrictions and costs associated with them [(see the *Scheduler Configuration* section of this document)](http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide). Any job you submit must be submitted to a partition to which you have access.
+The nodes are divided into several pools, called partitions. These partitions have different restrictions and costs associated with them ([see the *Scheduler Configuration* section of this document](http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide) and [the associated costs in Service Units](http://research-it.berkeley.edu/services/high-performance-computing/service-units-savio#Scaling)). Any job you submit must be submitted to a partition to which you have access.
 
 # Disk space options (home, scratch, project, condo storage)
 
