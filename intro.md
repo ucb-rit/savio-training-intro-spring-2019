@@ -19,7 +19,7 @@ This training session will cover the following topics:
      - Getting access to the system - FCA, condo, ICA
      - Login nodes, compute nodes, and DTN nodes
      - Savio computing nodes
-     - Disk space options (home, scratch, condo storage)
+     - Disk space options (home, scratch, group, condo storage)
  - Logging in, data transfer, and software
      - Logging in
      - Data transfer 
@@ -84,7 +84,7 @@ Let's take a look at the hardware specifications of the computing nodes on the c
 
 The nodes are divided into several pools, called partitions. These partitions have different restrictions and costs associated with them ([see the *Scheduler Configuration* section of this document](http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide) and [the associated costs in Service Units](http://research-it.berkeley.edu/services/high-performance-computing/service-units-savio#Scaling)). Any job you submit must be submitted to a partition to which you have access.
 
-# Disk space options (home, scratch, project, condo storage)
+# Disk space options (home, scratch, group, condo storage)
 
 You have access to the following disk space, described [here in the *Storage and Backup* section](http://research-it.berkeley.edu/services/high-performance-computing/user-guide/savio-user-guide).
 
@@ -154,7 +154,7 @@ ssh SAVIO_USERNAME@dtn.brc.berkeley.edu
 
 If you're already connected to a Savio login node, you can use `ssh dtn` to login to the dtn.
 
-One program you can use with Windows is *WinSCP*, and a multi-platform program for doing transfers via SFTP is *FileZilla*. After logging in, you'll see windows for the Savio filesystem and your local filesystem on your machine. You can drag files back and forth.
+One program you can use with Windows is [WinSCP](https://winscp.net/eng/index.php), and a multi-platform program for doing transfers via SFTP is [FileZilla](https://filezilla-project.org/). After logging in, you'll see windows for the Savio filesystem and your local filesystem on your machine. You can drag files back and forth.
 
 You can package multiple files (including directory structure) together using tar:
 ```
@@ -182,59 +182,37 @@ To transfer files, you open Globus at [globus.org](https://globus.org) and authe
 Globus also provides a [command line interface](https://docs.globus.org/cli/using-the-cli) that will allow you to do transfers programmatically, such that a transfer could be embedded in a workflow script.
 
 
-# Data transfer: Box 
+# Data transfer: Box & bDrive
 
-Box provides **unlimited**, free, secured, and encrypted content storage of files with a maximum file size of 15 Gb to Berkeley affiliates. So it's a good option for backup and long-term storage. 
+Box and bDrive (the Cal branded Google Drive) both provide **unlimited**, free, secured, and encrypted content storage of files to Berkeley affiliates. They are both good options for backup and long-term storage. While the total storage is unlimited, Box has a maximum file size of 15 Gb while bDrive has a maximum file size of 5Tb.
 
-You can move files between Box and your laptop using the Box Sync app. And you can interact with Box via a web browser at [http://box.berkeley.edu](http://box.berkeley.edu).
+You can interact with both services via web browser, and both services provide a desktop app you can use to move and sync files between your computer and the cloud.
 
-The best way to move files between Box and Savio is [via lftp as discussed here](http://research-it.berkeley.edu/services/high-performance-computing/transferring-data-between-savio-and-your-uc-berkeley-box-account). 
+ - [Box web app](http://box.berkeley.edu)
+ - [Box desktop app](https://www.box.com/resources/downloads)
+ - [bDrive web app](http://bdrive.berkeley.edu/)
+ - [Drive desktop app](https://www.google.com/drive/download/)
 
-Here's how you logon to box via *lftp* on Savio (assuming you've set up an external password already as described in the link above):
+[rclone](https://rclone.org/) is a command line program that you can use to sync files between both services and Savio. You can read [instructions for using rclone on Savio here](http://research-it.berkeley.edu/services/research-data-management-service/take-advantage-unlimited-bdrive-and-box-storage-using)
+
+Briefly, configuring rclone is done by running ```rclone config``` on Savio and following the instructions. The default options mostly work, but you should select "N" when asked if you want to use autoconfigure. For Box, you will need to have rclone installed on your local machine and run ```rclone authorize "box"``` there to complete authentication. For both services you will then need to paste a link into your browser and log in to your CalNet account to allow rclone access. You will then be given an authentication token, either in your browser or local terminal, which you paste into the ```rclone config``` prompt on Savio.
+
+Once you've successfully configured rclone you can sync files back and forth between Savio and Box/bDrive using commands akin to the standard command line tools.
 
 ```
-ssh SAVIO_USERNAME@dtn.brc.berkeley.edu
-module load lftp
-lftp ftp.box.com
-set ssl-allow true
-user CAMPUS_USERNAME@berkeley.edu
+rclone listremotes # Lists configured remotes.
+rclone lsd remote_name: # Lists directories, but not files. Note the trailing colon.
+rclone size remote_name:home # Prints size and number of objects in remote "home" directory. This can take a very long time when tallying Tbs of files.
+rclone copy /global/home/users/hannsode remote_name:savio_home/hannsode # Copies my entire home directory to a new directory on the remote.
+rclone copy /global/scratch/hannsode/genomes remote_name:genome_sequences # Copies entire directory contents to a dirctory on the remote with a new name.
 ```
 
-```
-lpwd # on Savio
-ls # on box
-!ls # on Savio
-mkdir workshops
-cd workshops # on box
-lcd savio-training-intro-2017 # on savio
-put parallel-multi.R # savio to box
-get zotero.sqlite
-```
-
-One additional command that can be quite useful is *mirror*, which lets you copy an entire directory to/from Box.
-
-```bash
-# to upload a directory from Savio to Box 
-mirror -R mydir
-# to download a directory from Box to Savio
-mirror mydir .
-```
-
-Be careful, because it's fairly easy to wipe out files or directories on Box.
-
-Finally you can set up *special purpose accounts* (Berkeley SPA) so files are owned at a project level rather than by individuals.
+Finally you can set up [special purpose accounts](https://calnetweb.berkeley.edu/calnet-departments/special-purpose-accounts-spa) so files are owned at a project level rather than by individuals.
 
 For more ambitious users, Box has a Python-based SDK that can be used to write scripts for file transfers. For more information on how to do this, check out the `BoxAuthenticationBootstrap.ipynb` and `TransferFilesFromBoxToSavioScratch.ipynb` from BRC's cyberinfrastructure engineer on [GitHub](https://github.com/ucberkeley/brc-cyberinfrastructure/tree/dev/analysis-workflows/notebooks)
 
-BRC is working (long-term) on making Globus available for transfer to/from Box, but it's not available yet.
+BRC is working (long-term) on making Globus available for transfer to/from Box and bDrive, but it's not available yet.
 
-# Data transfer: bDrive (Google Drive)
-
-bDrive provides **unlimited**, free, secured, and encrypted content storage of files with a maximum file size of 5 Tb to Berkeley affiliates.
-
-You can move files to and from your laptop using the Google Drive app. 
-
-There are also some third-party tools for copying files to/from Google Drive, though I've found them to be a bit klunky. This is why we recommend using Box for workflows at this point. However, BRC is also working on making Globus available for transfer to/from bDrive, though it's not available yet.
 
 # Editing files
 
